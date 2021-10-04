@@ -1,0 +1,56 @@
+body {
+    background: rgb(167, 167, 167);
+}
+.container {
+    border-radius: 10px;
+    margin: auto;
+}
+.headContainer {
+    width: 98%;
+    padding: .1vh;
+    text-align: center;
+    font-size: 1.3em;
+}
+
+.sideContainer {
+    float: left;
+    width: 15%;
+    height: 84vh;
+}
+
+.gridContainer {
+    background-image: none;
+    background: rgb(65, 65, 65);
+    float: right;
+    width: 85%;
+    height: 84vh;
+}
+
+.button {
+    width: 95%;
+    background: rgb(216, 216, 216);
+    margin-top: 1vh;
+    text-align: center;
+    padding: .5vh;
+    font-size: 1.1em;
+}
+
+.colorBox {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.colorBoxTitle {
+    width: 100%;
+    text-align: center;
+}
+
+.colorSlot {
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgb(36, 36, 36);
+    border-radius: 50%;
+    background: white;
+    margin: 5px
+}
