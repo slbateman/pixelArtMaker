@@ -4,37 +4,47 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="assests/main.css" />
+    <link rel="stylesheet" href="assets/main.css" />
     <title>Document</title>
   </head>
   <body>
-    <div class="container headContainer">
-      <h1>Pixel Art Maker</h1>
-    </div>
     <div>
       <div class="container sideContainer">
+        <h1 class="headContainer">Pixel Art Maker</h1>
         <button class="container button">
           <p>Load Art</p>
         </button>
         <button class="container button">
           <p>Save Art</p>
         </button>
-        <button class="container button" onclick="">
-          <p>Select Inspiration</p>
+        <button class="container button" onclick="uploadInspiration()">
+          <p>Upload Inspiration</p>
         </button>
         <div class="colorBox">
           <h2 class="colorBoxTitle">Color Picker</h2>
-          <div class="colorSlot"></div>
-          <div class="colorSlot"></div>
-          <div class="colorSlot"></div>
-          <div class="colorSlot"></div>
-          <div class="colorSlot"></div>
-          <div class="colorSlot"></div>
-          <div class="colorSlot"></div>
-          <div class="colorSlot"></div>
+          <input type="color" class="colorSlot active">
+          <input type="color" class="colorSlot">
+          <input type="color" class="colorSlot">
+          <input type="color" class="colorSlot">
+          <input type="color" class="colorSlot">
+          <input type="color" class="colorSlot">
+          <input type="color" class="colorSlot">
+          <input type="color" class="colorSlot">
+          <input type="color" class="colorSlot">
+        </div>
+        <div class="gridResolution">
+          <h3 class="gridResolutionTitle">Grid Resolution</h3>
+          <p class="inputResolution"><input type="number" class="inputResolutionInput"/>
+          x 
+          <input type="number" class="inputResolutionInput"/></p>
+        </div>
+        <div class="do">
+          <div class="undo"></div>
+          <div class="redo"></div>
         </div>
       </div>
-      <div class="container gridContainer"></div>
+      <div id="gridContainer" class="container gridContainer"></div>
     </div>
+    <script src="assets/main.js"></script>
   </body>
 </html>

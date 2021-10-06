@@ -17,8 +17,10 @@ body {
 }
 
 .gridContainer {
-    background-image: none;
-    background: rgb(65, 65, 65);
+    background-color: rgb(65, 65, 65);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
     float: right;
     width: 87%;
     height: 98vh;
@@ -46,10 +48,49 @@ body {
 }
 
 .colorSlot {
+    object-fit:contain;
     width: 40px;
     height: 40px;
     border: 1px solid rgb(36, 36, 36);
-    border-radius: 50%;
     background: white;
     margin: 5px
+}
+
+.active {
+    border: 4px solid black;
+}
+
+.gridResolution {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 3vh;
+}
+
+.gridResolutionTitle {
+    width: 100%;
+    text-align: center;
+}
+
+.inputResolution {
+    text-align: center;
+    margin-top: 0px;
+}
+
+.inputResolutionInput {
+    width: 30%; 
+}
+
+.do {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 3vh;
+}
+
+.undo {
+    background-image: ;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
