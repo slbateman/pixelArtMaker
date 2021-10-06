@@ -1,3 +1,6 @@
 const gridContainer = document.getElementById("gridContainer")
 
-// gridContainer.style.backgroundImage = `url("assets/images/test.jpg")`
+function uploadInspiration() {
+    gridContainer.style.backgroundImage = `url("https://picsum.photos/1000/700")`
+}
+    

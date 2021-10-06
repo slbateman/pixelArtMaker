@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="assests/main.css" />
+    <link rel="stylesheet" href="assets/main.css" />
     <title>Document</title>
   </head>
   <body>
@@ -17,7 +17,7 @@
         <button class="container button">
           <p>Save Art</p>
         </button>
-        <button class="container button" onclick="">
+        <button class="container button" onclick="uploadInspiration()">
           <p>Upload Inspiration</p>
         </button>
         <div class="colorBox">
@@ -32,11 +32,19 @@
           <input type="color" class="colorSlot">
           <input type="color" class="colorSlot">
         </div>
+        <div class="gridResolution">
+          <h3 class="gridResolutionTitle">Grid Resolution</h3>
+          <p class="inputResolution"><input type="number" class="inputResolutionInput"/>
+          x 
+          <input type="number" class="inputResolutionInput"/></p>
+        </div>
+        <div class="do">
+          <div class="undo"></div>
+          <div class="redo"></div>
+        </div>
       </div>
-      <div id="gridContainer" class="container gridContainer">
-        <!-- <img src="assets/images/test.jpg" /> -->
-      </div>
+      <div id="gridContainer" class="container gridContainer"></div>
     </div>
-    <script src="assests/main.js"></script>
+    <script src="assets/main.js"></script>
   </body>
 </html>
