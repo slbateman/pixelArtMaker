@@ -17,30 +17,37 @@
         <button class="container button">
           <p>Save Art</p>
         </button>
-        <button class="container button" onclick="uploadInspiration()">
-          <p>Upload Inspiration</p>
+        <button id="insprationGen" class="container button">
+          <p>Inspiration</p>
         </button>
         <div class="colorBox">
           <h2 class="colorBoxTitle">Color Picker</h2>
-          <input type="color" class="colorSlot active">
-          <input type="color" class="colorSlot">
-          <input type="color" class="colorSlot">
-          <input type="color" class="colorSlot">
-          <input type="color" class="colorSlot">
-          <input type="color" class="colorSlot">
-          <input type="color" class="colorSlot">
-          <input type="color" class="colorSlot">
-          <input type="color" class="colorSlot">
+          <input type="color" class="colorSlot active" />
+          <input type="color" class="colorSlot" />
+          <input type="color" class="colorSlot" />
+          <input type="color" class="colorSlot" />
+          <input type="color" class="colorSlot" />
+          <input type="color" class="colorSlot" />
+          <input type="color" class="colorSlot" />
+          <input type="color" class="colorSlot" />
+          <input type="color" class="colorSlot" />
         </div>
-        <div class="gridResolution">
+        <form class="gridResolution">
           <h3 class="gridResolutionTitle">Grid Resolution</h3>
-          <p class="inputResolution"><input type="number" class="inputResolutionInput"/>
-          x 
-          <input type="number" class="inputResolutionInput"/></p>
-        </div>
+          <p class="inputResolution">
+            <input id="width" type="number" class="inputResolutionInput" />
+            x
+            <input id="height" type="number" class="inputResolutionInput" />
+          </p>
+          <input id="resSubmit" type="submit" value="Submit">
+        </form>
         <div class="do">
-          <div class="undo"></div>
-          <div class="redo"></div>
+          <div>
+            <img class="undo" src="assets/images/undo.png" />
+          </div>
+          <div>
+            <img class="redo" src="assets/images/redo.png" />
+          </div>
         </div>
       </div>
       <div id="gridContainer" class="container gridContainer">
