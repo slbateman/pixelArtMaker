@@ -29,7 +29,6 @@ body {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    margin-top: 3vh;
 }
 
 .colorBoxTitle {
@@ -54,7 +53,6 @@ body {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    margin-top: 3vh;
 }
 
 .gridResolutionTitle {
@@ -74,15 +72,16 @@ body {
 .do {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: space-evenly;
     margin-top: 3vh;
 }
 
 .undo {
-    background-image: ;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+    width: 40px;
+}
+
+.redo {
+    width: 40px;
 }
 
 .gridContainer {
@@ -93,11 +92,21 @@ body {
     float: right;
     width: 87%;
     height: 98vh;
+    overflow: hidden;
 }
 
 .grid {
-    position: relative;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+.row {
+    display: inline-block;
+}
+
+.square {
+    border: 1px solid rgb(51, 51, 51);
+    width: 10px;
+    height: 10px;
 }
