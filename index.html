@@ -17,7 +17,7 @@
         <button class="container button">
           <p>Save Art</p>
         </button>
-        <button id="insprationGen" class="container button">
+        <button id="inspirationButton" class="container button" onclick="inspirationGen()" >
           <p>Inspiration</p>
         </button>
         <div class="colorBox">
@@ -32,15 +32,15 @@
           <input type="color" class="colorSlot" />
           <input type="color" class="colorSlot" />
         </div>
-        <form class="gridResolution">
+        <div class="gridResolution">
           <h3 class="gridResolutionTitle">Grid Resolution</h3>
           <p class="inputResolution">
             <input id="width" type="number" class="inputResolutionInput" />
             x
             <input id="height" type="number" class="inputResolutionInput" />
           </p>
-          <input id="resSubmit" type="submit" value="Submit">
-        </form>
+          <button id="resSubmit" onclick="makeGrid()">Submit</button>
+          </div>
         <div class="do">
           <div>
             <img class="undo" src="assets/images/undo.png" />
