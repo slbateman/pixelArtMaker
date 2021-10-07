@@ -11,13 +11,17 @@
     <div>
       <div class="container sideContainer">
         <h1 class="headContainer">Pixel Art Maker</h1>
-        <button class="container button">
-          <p>Load Art</p>
+        <button class="container button loadSave">
+          <p>Save</p>
         </button>
-        <button class="container button">
-          <p>Save Art</p>
+        <button class="container button loadSave">
+          <p>Load</p>
         </button>
-        <button id="inspirationButton" class="container button" onclick="inspirationGen()" >
+        <button
+          id="inspirationButton"
+          class="container button"
+          onclick="inspirationGen()"
+        >
           <p>Inspiration</p>
         </button>
         <div class="colorBox">
@@ -32,6 +36,17 @@
           <input type="color" class="colorSlot" />
           <input type="color" class="colorSlot" />
         </div>
+        <div class="action">
+          <div>
+            <img id="fill" src="assets/images/fill.png" />
+          </div>
+          <div>
+            <img id="paint" src="assets/images/paint.png" />
+          </div>
+          <div>
+            <img id="paint" src="assets/images/erase.png" />
+          </div>
+        </div>
         <div class="gridResolution">
           <h3 class="gridResolutionTitle">Grid Resolution</h3>
           <p class="inputResolution">
@@ -40,13 +55,13 @@
             <input id="height" type="number" class="inputResolutionInput" />
           </p>
           <button id="resSubmit" onclick="makeGrid()">Submit</button>
-          </div>
+        </div>
         <div class="do">
           <div>
-            <img class="undo" src="assets/images/undo.png" />
+            <img id="undo" src="assets/images/undo.png" />
           </div>
           <div>
-            <img class="redo" src="assets/images/redo.png" />
+            <img id="redo" src="assets/images/redo.png" />
           </div>
         </div>
       </div>

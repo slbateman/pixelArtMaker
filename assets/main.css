@@ -21,8 +21,10 @@ body {
     background: rgb(216, 216, 216);
     margin-top: 1vh;
     text-align: center;
-    padding: .5vh;
-    font-size: 1.1em;
+}
+
+.loadSave {
+    width: 47%;
 }
 
 .colorBox {
@@ -49,6 +51,11 @@ body {
     border: 4px solid black;
 }
 
+
+#fill, #paint, #erase {
+    width: 40px;
+}
+
 .gridResolution {
     display: flex;
     flex-wrap: wrap;
@@ -69,18 +76,14 @@ body {
     width: 30%; 
 }
 
-.do {
+.do, .action {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
     margin-top: 3vh;
 }
 
-.undo {
-    width: 40px;
-}
-
-.redo {
+#undo, #redo {
     width: 40px;
 }
 
