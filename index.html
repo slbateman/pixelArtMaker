@@ -5,6 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="assets/main.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Press+Start+2P"
+    />
     <title>Document</title>
   </head>
   <body>
@@ -25,7 +29,7 @@
           <p>Inspiration</p>
         </button>
         <div class="colorBox">
-          <h2 class="colorBoxTitle">Color Palette</h2>
+          <h3 class="colorBoxTitle">Color Palette</h3>
           <div id="colorSlot1" class="colorSlot active"></div>
           <div id="colorSlot2" class="colorSlot"></div>
           <div id="colorSlot3" class="colorSlot"></div>
@@ -34,37 +38,41 @@
           <div id="colorSlot6" class="colorSlot"></div>
           <div id="colorSlot7" class="colorSlot"></div>
           <div id="colorSlot8" class="colorSlot"></div>
-          <div id="colorSlot9" class="colorSlot"></div>
         </div>
         <div class="colorPicker">
-        <input type="color" class="colorPickerSlot" /><h4>ColorPicker</h4>
-      </div> 
+          <input type="color" class="colorPickerSlot" />
+          <h4>Color Picker</h4>
+        </div>
         <div class="tools">
           <div>
-            <img id="fill" class="tool active" src="assets/images/fill.png" />
+            <img id="fill" class="tool active" src="assets/images/fill.png" title="Fill Canvas" />
           </div>
           <div>
-            <img id="paint" class="tool " src="assets/images/paint.png" />
+            <img id="paint" class="tool" src="assets/images/paint.png" title="Paint a Square" />
           </div>
           <div>
-            <img id="paint" class="tool " src="assets/images/erase.png" />
+            <img id="erase" class="tool" src="assets/images/erase.png" title="Erase a Square" />
+          </div>
+          <div>
+            <img id="clean" class="tool" src="assets/images/clean.png" title="Wipe Canvas" />
           </div>
         </div>
+        <br />
         <div class="gridResolution">
           <h3 class="gridResolutionTitle">Grid Resolution</h3>
           <p class="inputResolution">
-            <input id="width" type="number" class="inputResolutionInput" />
+            <input id="width" type="number" class="inputResolutionInput" title="Pixels Wide" />
             x
-            <input id="height" type="number" class="inputResolutionInput" />
+            <input id="height" type="number" class="inputResolutionInput" title="Pixels Tall" />
           </p>
           <button id="resSubmit" onclick="makeGrid()">Submit</button>
         </div>
         <div class="do">
           <div>
-            <img id="undo" src="assets/images/undo.png" />
+            <img id="undo" src="assets/images/undo.png" title="Undo" />
           </div>
           <div>
-            <img id="redo" src="assets/images/redo.png" />
+            <img id="redo" src="assets/images/redo.png" title="Redo" />
           </div>
         </div>
       </div>

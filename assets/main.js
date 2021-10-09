@@ -1,16 +1,15 @@
-
 // Global Variable Decloration
 const gridContainer = document.getElementById("gridContainer");
 const grid = document.getElementById("grid");
 const resSubmit = document.getElementById("resSubmit");
 const fillButton = document.getElementById("fill");
-const colorPalettesList = document.querySelectorAll(".colorSlot")
-const toolList = document.querySelectorAll(".tool")
+let allSquares = document.querySelectorAll(".square");
+const colorPalettesList = document.querySelectorAll(".colorSlot");
+const toolList = document.querySelectorAll(".tool");
 let randomNum = 1;
-let colorSlotActive = document.getElementById("colorSlot1")
+let colorSlotActive = document.getElementById("colorSlot1");
 let paintColor = window.getComputedStyle(colorSlotActive).backgroundColor;
-let paintTool = document.getElementById("fill")
-
+let paintTool = document.getElementById("fill");
 
 // Generates random image. Uses the above variable to ensure
 // new image is generated after each click
@@ -55,10 +54,11 @@ function gridGenerate() {
       row.appendChild(square);
       // Changes square height and width based on height of window
       // and number of squares desired
-      square.style.height = `${98 / heightBox}vh`;
+      square.style.height = `${98  / heightBox}vh`;
       square.style.width = `${98 / heightBox}vh`;
     }
   }
+  allSquares = document.querySelectorAll(".square");
 }
 
 // Removes any existing grid
@@ -79,16 +79,19 @@ function makeGrid() {
 
 // Fill all squares with color
 function fillSquares() {
-  fillButton.addEventListener('click', () => {
-    const allSquares = document.querySelectorAll('.square');
-  allSquares.forEach(square => (square.style.backgroundColor = paintColor));
-});
+  fillButton.addEventListener("click", () => {
+    allSquares.forEach((square) => (square.style.backgroundColor = paintColor));
+  });
+}
+
+function toolYourSquares() {
+  
 }
 
 // Color Palette Selector to assign active color
-function colorActive(){
+function colorActive() {
   for (let i = 0; i < colorPalettesList.length; i++)
-    colorPalettesList[i].addEventListener('click', () => {
+    colorPalettesList[i].addEventListener("click", () => {
       colorSlotActive.classList.remove("active");
       colorSlotActive = colorPalettesList[i];
       colorSlotActive.classList.add("active");
@@ -96,16 +99,16 @@ function colorActive(){
 }
 
 // Tool Selector to assign active tool
-function toolActive(){
+function toolActive() {
   for (let i = 0; i < toolList.length; i++)
-    toolList[i].addEventListener('click', () => {
+    toolList[i].addEventListener("click", () => {
       paintTool.classList.remove("active");
       paintTool = toolList[i];
       paintTool.classList.add("active");
     });
 }
 
-function init(){
+function init() {
   fillSquares();
   colorActive();
   toolActive();
