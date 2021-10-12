@@ -2,14 +2,16 @@
 const gridContainer = document.getElementById("gridContainer");
 const grid = document.getElementById("grid");
 const resSubmit = document.getElementById("resSubmit");
-const fillButton = document.getElementById("fill");
-let allSquares = document.querySelectorAll(".square");
+// const fillButton = document.getElementById("fill");
 const colorPalettesList = document.querySelectorAll(".colorSlot");
 const toolList = document.querySelectorAll(".tool");
+let allSquares = document.querySelectorAll(".square");
 let randomNum = 1;
 let colorSlotActive = document.getElementById("colorSlot1");
 let paintColor = window.getComputedStyle(colorSlotActive).backgroundColor;
 let paintTool = document.getElementById("fill");
+
+console.log(toolList);
 
 // Generates random image. Uses the above variable to ensure
 // new image is generated after each click
@@ -54,7 +56,7 @@ function gridGenerate() {
       row.appendChild(square);
       // Changes square height and width based on height of window
       // and number of squares desired
-      square.style.height = `${98  / heightBox}vh`;
+      square.style.height = `${98 / heightBox}vh`;
       square.style.width = `${98 / heightBox}vh`;
     }
   }
@@ -77,15 +79,20 @@ function makeGrid() {
   gridGenerate();
 }
 
-// Fill all squares with color
-function fillSquares() {
-  fillButton.addEventListener("click", () => {
-    allSquares.forEach((square) => (square.style.backgroundColor = paintColor));
-  });
-}
-
-function toolYourSquares() {
-  
+function toolYourSquares(e) {
+  if (paintTool.id === "fill") {
+    console.log("Fill");
+    fillCanvas();
+  } else if (paintTool.id === "paint") {
+    console.log("Paint");
+    paintSquare();
+  } else if (paintTool.id === "erase") {
+    console.log("Erase");
+    eraseSquare();
+  } else if (paintTool.id === "clean") {
+    console.log("Clean");
+    cleanCanvas();
+  }
 }
 
 // Color Palette Selector to assign active color
@@ -105,13 +112,64 @@ function toolActive() {
       paintTool.classList.remove("active");
       paintTool = toolList[i];
       paintTool.classList.add("active");
+      console.log(paintTool);
+      toolYourSquares();
     });
 }
 
+function removeListeners() {
+}
+
+// Fill all squares with color
+function fillCanvas() {
+  gridContainer.addEventListener("click", () => {
+    allSquares.forEach((square) => (square.style.backgroundColor = paintColor));
+  });
+}
+
+// Allows you to drag and draw
+function paintSquare() {
+  gridContainer.addEventListener("mousedown", (e) => {
+    down = true;
+    e.target.style.backgroundColor = paintColor;
+    gridContainer.addEventListener("mouseup", () => {
+      down = false;
+      gridContainer.addEventListener("mouseover", (e) => {
+        if (e.target.className === "square" && down) {
+          e.target.style.backgroundColor = paintColor;
+        }
+      });
+    });
+  });
+}
+
+// Allows you to drag and erase
+function eraseSquare() {
+  gridContainer.addEventListener("mousedown", (e) => {
+    down = true;
+    e.target.style.backgroundColor = "";
+    gridContainer.addEventListener("mouseup", () => {
+      down = false;
+      gridContainer.addEventListener("mouseover", (e) => {
+        if (e.target.className === "square" && down) {
+          e.target.style.backgroundColor = "";
+        }
+      });
+    });
+  });
+}
+
+// Wipe clean all squares with color
+function cleanCanvas() {
+  gridContainer.addEventListener("click", () => {
+    allSquares.forEach((square) => (square.style.backgroundColor = ""));
+  });
+}
+
 function init() {
-  fillSquares();
   colorActive();
   toolActive();
+  toolYourSquares();
 }
 
 init();
