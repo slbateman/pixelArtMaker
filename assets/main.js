@@ -1,17 +1,17 @@
-// Global Variable Decloration
+// Global Variable Declaration
 const gridContainer = document.getElementById("gridContainer");
 const grid = document.getElementById("grid");
 const resSubmit = document.getElementById("resSubmit");
-// const fillButton = document.getElementById("fill");
 const colorPalettesList = document.querySelectorAll(".colorSlot");
 const toolList = document.querySelectorAll(".tool");
+const colorPicker = document.getElementById("colorPickerSlot")
 let allSquares = document.querySelectorAll(".square");
 let randomNum = 1;
 let colorSlotActive = document.getElementById("colorSlot1");
 let paintColor = window.getComputedStyle(colorSlotActive).backgroundColor;
 let paintTool = document.getElementById("fill");
+let paintBool = paintColor;
 
-console.log(toolList);
 
 // Generates random image. Uses the above variable to ensure
 // new image is generated after each click
@@ -79,22 +79,6 @@ function makeGrid() {
   gridGenerate();
 }
 
-function toolYourSquares(e) {
-  if (paintTool.id === "fill") {
-    console.log("Fill");
-    fillCanvas();
-  } else if (paintTool.id === "paint") {
-    console.log("Paint");
-    paintSquare();
-  } else if (paintTool.id === "erase") {
-    console.log("Erase");
-    eraseSquare();
-  } else if (paintTool.id === "clean") {
-    console.log("Clean");
-    cleanCanvas();
-  }
-}
-
 // Color Palette Selector to assign active color
 function colorActive() {
   for (let i = 0; i < colorPalettesList.length; i++)
@@ -102,7 +86,63 @@ function colorActive() {
       colorSlotActive.classList.remove("active");
       colorSlotActive = colorPalettesList[i];
       colorSlotActive.classList.add("active");
+      paintColor = window.getComputedStyle(colorSlotActive).backgroundColor;
+      toolYourSquares();
     });
+}
+
+// Assigns color from color picker to active color slot
+function colorChange() {
+  colorPicker.addEventListener("input", () => {
+    colorSlotActive.style.backgroundColor = colorPicker.value;
+    paintColor = window.getComputedStyle(colorSlotActive).backgroundColor;
+    toolYourSquares();
+  });
+}
+
+// Fill all squares with color
+function fillCanvas() {
+  paintTool.addEventListener("mousedown", () => {
+    allSquares.forEach((square) => (square.style.backgroundColor = paintColor));
+  });
+}
+
+// Allows you to drag and draw or drag and erase
+function paintSquare() {
+  gridContainer.addEventListener("mousedown", (e) => {
+    down = true;
+    e.target.style.backgroundColor = paintBool;
+    gridContainer.addEventListener("mouseup", () => {
+      down = false;
+      gridContainer.addEventListener("mouseover", (e) => {
+        if (e.target.className === "square" && down) {
+          e.target.style.backgroundColor = paintBool;
+        }
+      });
+    });
+  });
+}
+
+// Wipe clean all squares with color
+function cleanCanvas() {
+  paintTool.addEventListener("click", () => {
+    allSquares.forEach((square) => (square.style.backgroundColor = ""));
+  });
+}
+
+// This function will call the appropriate Listeners for the selected tool
+function toolYourSquares(e) {
+  if (paintTool.id === "fill") {
+    fillCanvas();
+  } else if (paintTool.id === "paint") {
+    paintBool = paintColor;
+    paintSquare();
+  } else if (paintTool.id === "erase") {
+    paintBool = "";
+    paintSquare();
+  } else if (paintTool.id === "clean") {
+    cleanCanvas();
+  }
 }
 
 // Tool Selector to assign active tool
@@ -112,64 +152,16 @@ function toolActive() {
       paintTool.classList.remove("active");
       paintTool = toolList[i];
       paintTool.classList.add("active");
-      console.log(paintTool);
+      // Required for calling the correct Listeners for selected tool
       toolYourSquares();
     });
-}
-
-function removeListeners() {
-}
-
-// Fill all squares with color
-function fillCanvas() {
-  gridContainer.addEventListener("click", () => {
-    allSquares.forEach((square) => (square.style.backgroundColor = paintColor));
-  });
-}
-
-// Allows you to drag and draw
-function paintSquare() {
-  gridContainer.addEventListener("mousedown", (e) => {
-    down = true;
-    e.target.style.backgroundColor = paintColor;
-    gridContainer.addEventListener("mouseup", () => {
-      down = false;
-      gridContainer.addEventListener("mouseover", (e) => {
-        if (e.target.className === "square" && down) {
-          e.target.style.backgroundColor = paintColor;
-        }
-      });
-    });
-  });
-}
-
-// Allows you to drag and erase
-function eraseSquare() {
-  gridContainer.addEventListener("mousedown", (e) => {
-    down = true;
-    e.target.style.backgroundColor = "";
-    gridContainer.addEventListener("mouseup", () => {
-      down = false;
-      gridContainer.addEventListener("mouseover", (e) => {
-        if (e.target.className === "square" && down) {
-          e.target.style.backgroundColor = "";
-        }
-      });
-    });
-  });
-}
-
-// Wipe clean all squares with color
-function cleanCanvas() {
-  gridContainer.addEventListener("click", () => {
-    allSquares.forEach((square) => (square.style.backgroundColor = ""));
-  });
 }
 
 function init() {
   colorActive();
   toolActive();
   toolYourSquares();
+  colorChange();
 }
 
 init();
