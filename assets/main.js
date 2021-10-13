@@ -4,7 +4,11 @@ const grid = document.getElementById("grid");
 const resSubmit = document.getElementById("resSubmit");
 const colorPalettesList = document.querySelectorAll(".colorSlot");
 const toolList = document.querySelectorAll(".tool");
-const colorPicker = document.getElementById("colorPickerSlot")
+const colorPicker = document.getElementById("colorPickerSlot");
+const saveBtn = document.getElementById("saveButton");
+const loadBtn = document.getElementById("loadButton");
+let widthBox = document.getElementById("width").value;
+let heightBox = document.getElementById("height").value;
 let allSquares = document.querySelectorAll(".square");
 let randomNum = 1;
 let colorSlotActive = document.getElementById("colorSlot1");
@@ -12,8 +16,7 @@ let paintColor = window.getComputedStyle(colorSlotActive).backgroundColor;
 let paintTool = document.getElementById("fill");
 let paintBool = paintColor;
 
-
-// Generates random image. Uses the above variable to ensure
+// Generates random image. Uses the randomNum variable to ensure
 // new image is generated after each click
 function inspirationGen() {
   gridContainer.style.backgroundImage =
@@ -25,7 +28,6 @@ function inspirationGen() {
 function rowMake() {
   const row = document.createElement("div");
   row.classList.add("row");
-
   return row;
 }
 
@@ -33,15 +35,13 @@ function rowMake() {
 function squareMake() {
   const square = document.createElement("div");
   square.classList.add("square");
-
   return square;
 }
 
 // Generates grid based on user input
 function gridGenerate() {
-  // Pulls data from input fields
-  let widthBox = document.getElementById("width").value;
-  let heightBox = document.getElementById("height").value;
+  widthBox = document.getElementById("width").value;
+  heightBox = document.getElementById("height").value;
   // Generates rows
   for (let i = 0; i < widthBox; i++) {
     const row = rowMake();
@@ -52,7 +52,7 @@ function gridGenerate() {
     for (let j = 0; j < heightBox; j++) {
       const square = squareMake();
       // Assigns ID to square to enable color change later
-      square.setAttribute("id", `row-${i}-${j}`);
+      square.setAttribute("id", `sq-${i}-${j}`);
       row.appendChild(square);
       // Changes square height and width based on height of window
       // and number of squares desired
@@ -157,11 +157,44 @@ function toolActive() {
     });
 }
 
+// Saves each square background color to local storage
+function saveGrid() {
+  saveBtn.addEventListener("click", () => {
+    const gridArray = [];
+    for (let i = 0; i < allSquares.length; i++) {
+      const squareColors = allSquares[i];
+      gridArray.push(squareColors.style.backgroundColor);
+    }
+    const gridInfo = {
+      grid: gridArray,
+      gridWidth: widthBox,
+      gridHeight: heightBox,
+    };
+    localStorage.setItem("gridSave", JSON.stringify(gridInfo));
+  });
+}
+
+// Retrieves each square background color from local storage
+function loadGrid() {
+  loadBtn.addEventListener('click', () => {
+    const savedGridInfo = JSON.parse(localStorage.getItem('gridSave'));
+    document.getElementById("width").value = savedGridInfo.gridWidth;
+    document.getElementById("height").value = savedGridInfo.gridHeight;
+    makeGrid();
+    for (let i = 0; i < allSquares.length; i++) {
+      allSquares[i].style.backgroundColor = savedGridInfo.grid[i];
+    }
+  });
+}
+
 function init() {
   colorActive();
   toolActive();
   toolYourSquares();
   colorChange();
+  gridGenerate();
+  saveGrid();
+  loadGrid();
 }
 
 init();

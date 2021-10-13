@@ -15,10 +15,10 @@
     <div>
       <div class="container sideContainer">
         <h1 class="headContainer">Pixel Art Maker</h1>
-        <button class="container button loadSave">
+        <button id="saveButton" class="container button loadSave">
           <p>Save</p>
         </button>
-        <button class="container button loadSave">
+        <button id="loadButton" class="container button loadSave">
           <p>Load</p>
         </button>
         <button
@@ -61,9 +61,9 @@
         <div class="gridResolution">
           <h3 class="gridResolutionTitle">Grid Resolution</h3>
           <p class="inputResolution">
-            <input id="width" type="number" class="inputResolutionInput" title="Pixels Wide" />
+            <input id="width" type="number" value="40" class="inputResolutionInput" title="Pixels Wide" />
             x
-            <input id="height" type="number" class="inputResolutionInput" title="Pixels Tall" />
+            <input id="height" type="number" value="20" class="inputResolutionInput" title="Pixels Tall" />
           </p>
           <button id="resSubmit" onclick="makeGrid()">Submit</button>
         </div>
@@ -75,10 +75,14 @@
             <img id="redo" src="assets/images/redo.png" title="Redo" />
           </div>
         </div>
+        <form enctype="multipart/form-data" action="/upload/image" method="post">
+          <input id="image-file" type="file" />
+      </form>
       </div>
       <div id="gridContainer" class="container gridContainer">
         <div id="grid" class="grid"></div>
       </div>
+      
     </div>
     <script src="assets/main.js"></script>
   </body>
