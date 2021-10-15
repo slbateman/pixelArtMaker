@@ -10,7 +10,6 @@ const loadBtn = document.getElementById("loadButton");
 let widthBox = document.getElementById("width").value;
 let heightBox = document.getElementById("height").value;
 let allSquares = document.querySelectorAll(".square");
-let randomNum = 1;
 let colorSlotActive = document.getElementById("colorSlot1");
 let paintColor = window.getComputedStyle(colorSlotActive).backgroundColor;
 let paintTool = document.getElementById("fill");
@@ -19,9 +18,19 @@ let paintBool = paintColor;
 // Generates random image. Uses the randomNum variable to ensure
 // new image is generated after each click
 function inspirationGen() {
-  gridContainer.style.backgroundImage =
-    "url(https://picsum.photos/1000/700?random=" + randomNum;
-  randomNum++;
+  const fetchImage = fetch('https://picsum.photos/1000/700');
+  console.log(fetchImage);
+  fetchImage.then((response) => {
+    return response;
+  }).then((data) => {
+    gridContainer.style.backgroundImage = `url(${data.url})`
+  });
+}
+
+// Enable user to upload their own image as inspiration
+function uploadImage() {
+  modal
+  
 }
 
 // Make rows
@@ -102,7 +111,7 @@ function colorChange() {
 
 // Fill all squares with color
 function fillCanvas() {
-  paintTool.addEventListener("mousedown", () => {
+  paintTool.addEventListener("click", () => {
     allSquares.forEach((square) => (square.style.backgroundColor = paintColor));
   });
 }
@@ -114,11 +123,12 @@ function paintSquare() {
     e.target.style.backgroundColor = paintBool;
     gridContainer.addEventListener("mouseup", () => {
       down = false;
+    });
       gridContainer.addEventListener("mouseover", (e) => {
         if (e.target.className === "square" && down) {
           e.target.style.backgroundColor = paintBool;
         }
-      });
+
     });
   });
 }
