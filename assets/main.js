@@ -7,6 +7,8 @@ const toolList = document.querySelectorAll(".tool");
 const colorPicker = document.getElementById("colorPickerSlot");
 const saveBtn = document.getElementById("saveButton");
 const loadBtn = document.getElementById("loadButton");
+const modal = document.getElementById("uploadModal");
+const span = document.getElementsByClassName("close")[0];
 let widthBox = document.getElementById("width").value;
 let heightBox = document.getElementById("height").value;
 let allSquares = document.querySelectorAll(".square");
@@ -28,9 +30,16 @@ function inspirationGen() {
 }
 
 // Enable user to upload their own image as inspiration
-function uploadImage() {
-  modal
-  
+function modalLoad() {
+  modal.style.display = "block";
+}
+function modalClose() {
+  modal.style.display = "none";
+}
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
 }
 
 // Make rows
@@ -177,6 +186,7 @@ function saveGrid() {
     }
     const gridInfo = {
       grid: gridArray,
+      gridImage: gridContainer.style.backgroundImage,
       gridWidth: widthBox,
       gridHeight: heightBox,
     };
@@ -191,6 +201,7 @@ function loadGrid() {
     document.getElementById("width").value = savedGridInfo.gridWidth;
     document.getElementById("height").value = savedGridInfo.gridHeight;
     makeGrid();
+    gridContainer.style.backgroundImage = savedGridInfo.gridImage;
     for (let i = 0; i < allSquares.length; i++) {
       allSquares[i].style.backgroundColor = savedGridInfo.grid[i];
     }
