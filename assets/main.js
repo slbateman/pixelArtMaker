@@ -9,7 +9,11 @@ const saveBtn = document.getElementById("saveButton");
 const loadBtn = document.getElementById("loadButton");
 const modal = document.getElementById("uploadModal");
 const span = document.getElementsByClassName("close")[0];
-let imgBtn = document.getElementById("imageSubmit")
+const undoBtn = document.getElementById("undo");
+const redoBtn = document.getElementById("redo")
+const gridInfo = [];
+let undoLevel = 0;
+let imgBtn = document.getElementById("imageSubmit");
 let widthBox = document.getElementById("width").value;
 let heightBox = document.getElementById("height").value;
 let allSquares = document.querySelectorAll(".square");
@@ -142,6 +146,7 @@ function fillCanvas() {
 function paintSquare() {
   gridContainer.addEventListener("mousedown", (e) => {
     down = true;
+    save("paint");
     e.target.style.backgroundColor = paintBool;
     gridContainer.addEventListener("mouseup", () => {
       down = false;
@@ -150,7 +155,6 @@ function paintSquare() {
         if (e.target.className === "square" && down) {
           e.target.style.backgroundColor = paintBool;
         }
-
     });
   });
 }
@@ -164,17 +168,39 @@ function cleanCanvas() {
 
 // This function will call the appropriate Listeners for the selected tool
 function toolYourSquares(e) {
-  if (paintTool.id === "fill") {
-    fillCanvas();
-  } else if (paintTool.id === "paint") {
-    paintBool = paintColor;
-    paintSquare();
-  } else if (paintTool.id === "erase") {
-    paintBool = "";
-    paintSquare();
-  } else if (paintTool.id === "clean") {
-    cleanCanvas();
+  switch (paintTool.id){
+    case "fill":
+      fillCanvas();
+      break;
+    case "paint":
+      paintBool = paintColor;
+      paintSquare();
+      break;
+    case "erase":
+      paintBool = "";
+      paintSquare();
+      break;
+    case "clean":
+      cleanCanvas();
+      break;
+    default:
+      fillCanvas();
   }
+//   if (paintTool.id === "fill") {
+//     console.log("fill" + paintTool.id)
+//     fillCanvas();
+//   } else if (paintTool.id === "paint") {
+//     console.log("paint"  + paintTool.id)
+//     paintBool = paintColor;
+//     paintSquare();
+//   } else if (paintTool.id === "erase") {
+//     console.log("erase" + paintTool.id)
+//     paintBool = "";
+//     paintSquare();
+//   } else if (paintTool.id === "clean") {
+//     console.log("clean" + paintTool.id)
+//     cleanCanvas();
+//   }
 }
 
 // Tool Selector to assign active tool
@@ -192,25 +218,53 @@ function toolActive() {
 // Saves each square background color to local storage
 function saveGrid() {
   saveBtn.addEventListener("click", () => {
-    const gridArray = [];
-    for (let i = 0; i < allSquares.length; i++) {
-      const squareColors = allSquares[i];
-      gridArray.push(squareColors.style.backgroundColor);
-    }
-    const gridInfo = {
-      grid: gridArray,
-      gridImage: gridContainer.style.backgroundImage,
-      gridWidth: widthBox,
-      gridHeight: heightBox,
-    };
-    localStorage.setItem("gridSave", JSON.stringify(gridInfo));
+    save("grid");
   });
 }
 
-// Retrieves each square background color from local storage
-function loadGrid() {
-  loadBtn.addEventListener('click', () => {
-    const savedGridInfo = JSON.parse(localStorage.getItem('gridSave'));
+function save(test) {
+  console.log(test)
+  const gridArray = [];
+  for (let i = 0; i < allSquares.length; i++) {
+    const squareColors = allSquares[i];
+    gridArray.push(squareColors.style.backgroundColor);
+  }
+  gridInfo.push({
+    grid: gridArray,
+    gridImage: gridContainer.style.backgroundImage,
+    gridWidth: widthBox,
+    gridHeight: heightBox,
+  });
+  localStorage.setItem("gridSave", JSON.stringify(gridInfo[gridInfo.length-1]));
+  // console.log(gridInfo);
+  undoLevel++;
+}
+
+function undoAction() {
+  undoBtn.addEventListener("click", () => {
+    if (undoLevel>=0){
+      localStorage.setItem("gridSave", JSON.stringify(gridInfo[undoLevel-1]));
+      undoLevel--;
+      load();
+    };
+    console.log(undoLevel)
+  });
+}
+
+function redoAction() {
+  redoBtn.addEventListener("click", () => {
+    console.log("redo clicked")
+    if (undoLevel<=gridInfo.length){
+      localStorage.setItem("gridSave", JSON.stringify(gridInfo[undoLevel+1]));
+      undoLevel++;
+      load();
+    };
+    console.log(undoLevel)
+  });
+}
+
+function load() {
+  const savedGridInfo = JSON.parse(localStorage.getItem('gridSave'));
     document.getElementById("width").value = savedGridInfo.gridWidth;
     document.getElementById("height").value = savedGridInfo.gridHeight;
     makeGrid();
@@ -218,17 +272,25 @@ function loadGrid() {
     for (let i = 0; i < allSquares.length; i++) {
       allSquares[i].style.backgroundColor = savedGridInfo.grid[i];
     }
+}
+// Retrieves each square background color from local storage
+function loadGrid() {
+  loadBtn.addEventListener('click', () => {
+    load()
   });
 }
 
 function init() {
   colorActive();
   toolActive();
-  toolYourSquares();
+  // toolYourSquares();
   colorChange();
   gridGenerate();
   saveGrid();
   loadGrid();
+  undoAction();
+  redoAction();
+
 }
 
 init();
