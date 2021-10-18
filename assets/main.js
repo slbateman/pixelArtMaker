@@ -9,6 +9,7 @@ const saveBtn = document.getElementById("saveButton");
 const loadBtn = document.getElementById("loadButton");
 const modal = document.getElementById("uploadModal");
 const span = document.getElementsByClassName("close")[0];
+let imgBtn = document.getElementById("imageSubmit")
 let widthBox = document.getElementById("width").value;
 let heightBox = document.getElementById("height").value;
 let allSquares = document.querySelectorAll(".square");
@@ -40,6 +41,18 @@ window.onclick = function(event) {
   if (event.target == modal) {
     modal.style.display = "none";
   }
+}
+
+// Uploads file and reads it as a Data URL to be loaded
+function imageUpload() {
+  const imgFiles = document.getElementById("imageFile").files;
+  let imgFile = imgFiles[0];
+  const reader = new FileReader();
+  modalClose();
+  reader.addEventListener('load', (event) => {
+    gridContainer.style.backgroundImage = `url(${event.target.result})`;
+  });
+  reader.readAsDataURL(imgFile);
 }
 
 // Make rows

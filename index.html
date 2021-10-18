@@ -33,7 +33,7 @@
           class="container button loadSave"
           onclick="modalLoad()"
         >
-          <p>Upload Image</p>
+          <p>Upload</p>
         </button>
         <div class="colorBox">
           <h3 class="colorBoxTitle">Color Palette</h3>
@@ -130,8 +130,8 @@
             action="/upload/image"
             method="post"
           >
-            <input id="imageFile" type="file" />
-            <input id="imageSubmit" type="submit">
+            <input id="imageFile" type="file" accept=".jpg, .jpeg, .png" />
+            <button id="imageSubmit" type="button" onclick="imageUpload()">Upload</button>
           </form>
         </div>
       </div>
