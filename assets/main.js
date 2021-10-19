@@ -1,5 +1,6 @@
 // Global Variable Declaration
 const gridContainer = document.getElementById("gridContainer");
+gridContainer.style.cursor = "crosshair";
 const grid = document.getElementById("grid");
 const resSubmit = document.getElementById("resSubmit");
 const colorPalettesList = document.querySelectorAll(".colorSlot");
@@ -25,16 +26,20 @@ let paintBool = paintColor;
 // Generates random image. Uses the randomNum variable to ensure
 // new image is generated after each click
 function inspirationGen() {
+  // A variable for storing the API object
   const fetchImage = fetch('https://picsum.photos/1000/700');
-  console.log(fetchImage);
+  // Returns API object for use (object is already a JSON object)
   fetchImage.then((response) => {
     return response;
-  }).then((data) => {
+  })
+  // Pulls the url associated with the object to be stored
+  // as the background image for the entire grid
+  .then((data) => {
     gridContainer.style.backgroundImage = `url(${data.url})`
   });
 }
 
-// Enable user to upload their own image as inspiration
+// Enable user to upload their own image to grid background
 function modalLoad() {
   modal.style.display = "block";
 }
@@ -49,21 +54,26 @@ window.onclick = function(event) {
 
 // Uploads file and reads it as a Data URL to be loaded
 function imageUpload() {
+  // Creates an array of all files from the file input form
+  // however, only one file is able to be selected in the form
   const imgFiles = document.getElementById("imageFile").files;
+  // Stores the first file from the array (there should only ever be one file)
   let imgFile = imgFiles[0];
+  // Creates a new Object that enables it to be read
   const reader = new FileReader();
   modalClose();
   reader.addEventListener('load', (event) => {
+    // Reads the image file
     gridContainer.style.backgroundImage = `url(${event.target.result})`;
   });
   reader.readAsDataURL(imgFile);
 }
 
-// Make rows
-function rowMake() {
-  const row = document.createElement("div");
-  row.classList.add("row");
-  return row;
+// Make columns
+function colMake() {
+  const col = document.createElement("div");
+  col.classList.add("col");
+  return col;
 }
 
 // Make squares
@@ -77,41 +87,45 @@ function squareMake() {
 function gridGenerate() {
   widthBox = document.getElementById("width").value;
   heightBox = document.getElementById("height").value;
-  // Generates rows
+  // Generates columns
   for (let i = 0; i < widthBox; i++) {
-    const row = rowMake();
-    // Assigns ID to row to enable removal later
-    row.setAttribute("id", `row-${i}`);
-    grid.appendChild(row);
+    const col = colMake();
+    // Assigns ID to col to enable removal later
+    col.setAttribute("id", `col-${i}`);
+    grid.appendChild(col);
     // Generates squares
     for (let j = 0; j < heightBox; j++) {
       const square = squareMake();
       // Assigns ID to square to enable color change later
       square.setAttribute("id", `sq-${i}-${j}`);
-      row.appendChild(square);
+      col.appendChild(square);
       // Changes square height and width based on height of window
       // and number of squares desired
       square.style.height = `${98 / heightBox}vh`;
       square.style.width = `${98 / heightBox}vh`;
     }
   }
+  // Replaces any squares stored in allSquares with new batch
   allSquares = document.querySelectorAll(".square");
 }
 
 // Removes any existing grid
 function gridRemove() {
-  const rowNum = document.querySelectorAll(".row");
-  for (let i = 0; i < rowNum.length; i++) {
-    let row = document.getElementById(`row-${i}`);
-    grid.removeChild(row);
+  const colNum = document.querySelectorAll(".col");
+  for (let i = 0; i < colNum.length; i++) {
+    let col = document.getElementById(`col-${i}`);
+    grid.removeChild(col);
   }
 }
 
 // This function will wipe the grid before regenerating it
 // in case there is a grid already in place
 function makeGrid() {
-  gridRemove();
-  gridGenerate();
+  resSubmit.addEventListener("click", (e) => {
+    e.preventDefault();
+    gridRemove();
+    gridGenerate();
+  });
 }
 
 // This will update the color based on tool selected color and tool
@@ -177,7 +191,8 @@ function squareListener(e) {
   });
 }
 
-// Tool Selector to assign active tool
+// Tool Selector to assign active tool and 
+// sets the paint boolean to paint color or none
 function toolActive() {
   for (let i = 0; i < toolList.length; i++)
     toolList[i].addEventListener("click", () => {
@@ -188,18 +203,14 @@ function toolActive() {
         paintBool = paintColor;
       } else if (paintTool.id === "erase" || paintTool.id === "clean"){
         paintBool = "";
+      } else {
+        paintBool = "";
       }
     });
 }
 
-function saveGrid() {
-  saveBtn.addEventListener("click", () => {
-    save();
-  });
-}
-
 // Saves most recent grid color state to local storage
-// and adds grid state to a growing array: gridInfo
+// and adds grid state to a gcoling array: gridInfo
 function save() {
   const gridArray = [];
   for (let i = 0; i < allSquares.length; i++) {
@@ -216,6 +227,37 @@ function save() {
   undoLevel++;
 }
 
+// Saves the grid color state when save button is clicked
+function saveGrid() {
+  saveBtn.addEventListener("click", () => {
+    save();
+  });
+}
+
+// Load the saved grid from local storage
+function load() {
+  const savedGridInfo = JSON.parse(localStorage.getItem('gridSave'));
+    // Gather the height and width from the saved grid
+    document.getElementById("width").value = savedGridInfo.gridWidth;
+    document.getElementById("height").value = savedGridInfo.gridHeight;
+    // Regenerate the grid from the saved width/height 
+    makeGrid();
+    // Load any saved image URL to the Background Image
+    gridContainer.style.backgroundImage = savedGridInfo.gridImage;
+    // Load the saved square color by looping through the saved array
+    for (let i = 0; i < allSquares.length; i++) {
+      allSquares[i].style.backgroundColor = savedGridInfo.grid[i];
+    }
+}
+// Retrieves the saved grid from local storage when the load button is clicked
+function loadGrid() {
+  loadBtn.addEventListener('click', () => {
+    load()
+  });
+}
+
+// Cycles through the gridInfo array and loads based on current level
+// and moves backward in time
 function undoAction() {
   undoBtn.addEventListener("click", () => {
     if (undoLevel > 0){
@@ -226,6 +268,8 @@ function undoAction() {
   });
 }
 
+// Cycles through the gridInfo array and loads based on current level
+// and moves forward in time
 function redoAction() {
   redoBtn.addEventListener("click", () => {
     if (undoLevel < gridInfo.length){
@@ -236,29 +280,15 @@ function redoAction() {
   });
 }
 
-function load() {
-  const savedGridInfo = JSON.parse(localStorage.getItem('gridSave'));
-    document.getElementById("width").value = savedGridInfo.gridWidth;
-    document.getElementById("height").value = savedGridInfo.gridHeight;
-    makeGrid();
-    gridContainer.style.backgroundImage = savedGridInfo.gridImage;
-    for (let i = 0; i < allSquares.length; i++) {
-      allSquares[i].style.backgroundColor = savedGridInfo.grid[i];
-    }
-}
-// Retrieves each square background color from local storage
-function loadGrid() {
-  loadBtn.addEventListener('click', () => {
-    load()
-  });
-}
-
+// A function that stores all functions that need
+// to be run upon loading the page
 function init() {
   colorActive();
   toolActive();
   squareListener();
   colorChange();
   gridGenerate();
+  makeGrid();
   saveGrid();
   loadGrid();
   undoAction();
