@@ -114,6 +114,15 @@ function makeGrid() {
   gridGenerate();
 }
 
+// This will update the color based on tool selected color and tool
+function setColor(){
+  paintColor = window.getComputedStyle(colorSlotActive).backgroundColor;
+  paintBool = paintColor;
+  if (paintTool.id === "erase" || paintTool.id === "clean") {
+    paintBool = "";
+  };
+}
+
 // Color Palette Selector to assign active color
 function colorActive() {
   for (let i = 0; i < colorPalettesList.length; i++)
@@ -121,8 +130,7 @@ function colorActive() {
       colorSlotActive.classList.remove("active");
       colorSlotActive = colorPalettesList[i];
       colorSlotActive.classList.add("active");
-      paintColor = window.getComputedStyle(colorSlotActive).backgroundColor;
-      toolYourSquares();
+      setColor();
     });
 }
 
@@ -130,77 +138,43 @@ function colorActive() {
 function colorChange() {
   colorPicker.addEventListener("input", () => {
     colorSlotActive.style.backgroundColor = colorPicker.value;
-    paintColor = window.getComputedStyle(colorSlotActive).backgroundColor;
-    toolYourSquares();
+    setColor();
   });
 }
 
-// Fill all squares with color
-function fillCanvas() {
-  paintTool.addEventListener("click", () => {
-    allSquares.forEach((square) => (square.style.backgroundColor = paintColor));
-  });
-}
-
-// Allows you to drag and draw or drag and erase
-function paintSquare() {
+// This function generates the listener for the grid
+function squareListener(e) {
   gridContainer.addEventListener("mousedown", (e) => {
+    // Removes all future redos if undo and paint occurs
+    while (undoLevel < gridInfo.length){
+      gridInfo.pop();
+    };
+    // Saves the grid before every tool stroke (almost full autosave)
+    save();
     down = true;
-    save("paint");
-    e.target.style.backgroundColor = paintBool;
-    gridContainer.addEventListener("mouseup", () => {
-      down = false;
-    });
-      gridContainer.addEventListener("mouseover", (e) => {
-        if (e.target.className === "square" && down) {
-          e.target.style.backgroundColor = paintBool;
-        }
-    });
+    // Depending on which tool is selected,
+    // the listener will activate the proper action
+    switch (paintTool.id){
+      case "fill":
+      case "clean":
+        allSquares.forEach((square) => (square.style.backgroundColor = paintBool));
+        break;
+      case "paint":
+      case "erase":
+        e.target.style.backgroundColor = paintBool;
+        gridContainer.addEventListener("mouseup", () => {
+          down = false;
+        });
+          gridContainer.addEventListener("mouseover", (e) => {
+            if (e.target.className === "square" && down) {
+              e.target.style.backgroundColor = paintBool;
+            }
+        });
+        break;
+      default:
+        allSquares.forEach((square) => (square.style.backgroundColor = paintBool));
+    };
   });
-}
-
-// Wipe clean all squares with color
-function cleanCanvas() {
-  paintTool.addEventListener("click", () => {
-    allSquares.forEach((square) => (square.style.backgroundColor = ""));
-  });
-}
-
-// This function will call the appropriate Listeners for the selected tool
-function toolYourSquares(e) {
-  switch (paintTool.id){
-    case "fill":
-      fillCanvas();
-      break;
-    case "paint":
-      paintBool = paintColor;
-      paintSquare();
-      break;
-    case "erase":
-      paintBool = "";
-      paintSquare();
-      break;
-    case "clean":
-      cleanCanvas();
-      break;
-    default:
-      fillCanvas();
-  }
-//   if (paintTool.id === "fill") {
-//     console.log("fill" + paintTool.id)
-//     fillCanvas();
-//   } else if (paintTool.id === "paint") {
-//     console.log("paint"  + paintTool.id)
-//     paintBool = paintColor;
-//     paintSquare();
-//   } else if (paintTool.id === "erase") {
-//     console.log("erase" + paintTool.id)
-//     paintBool = "";
-//     paintSquare();
-//   } else if (paintTool.id === "clean") {
-//     console.log("clean" + paintTool.id)
-//     cleanCanvas();
-//   }
 }
 
 // Tool Selector to assign active tool
@@ -210,20 +184,23 @@ function toolActive() {
       paintTool.classList.remove("active");
       paintTool = toolList[i];
       paintTool.classList.add("active");
-      // Required for calling the correct Listeners for selected tool
-      toolYourSquares();
+      if (paintTool.id === "fill" || paintTool.id === "paint"){
+        paintBool = paintColor;
+      } else if (paintTool.id === "erase" || paintTool.id === "clean"){
+        paintBool = "";
+      }
     });
 }
 
-// Saves each square background color to local storage
 function saveGrid() {
   saveBtn.addEventListener("click", () => {
-    save("grid");
+    save();
   });
 }
 
-function save(test) {
-  console.log(test)
+// Saves most recent grid color state to local storage
+// and adds grid state to a growing array: gridInfo
+function save() {
   const gridArray = [];
   for (let i = 0; i < allSquares.length; i++) {
     const squareColors = allSquares[i];
@@ -236,30 +213,26 @@ function save(test) {
     gridHeight: heightBox,
   });
   localStorage.setItem("gridSave", JSON.stringify(gridInfo[gridInfo.length-1]));
-  // console.log(gridInfo);
   undoLevel++;
 }
 
 function undoAction() {
   undoBtn.addEventListener("click", () => {
-    if (undoLevel>=0){
-      localStorage.setItem("gridSave", JSON.stringify(gridInfo[undoLevel-1]));
+    if (undoLevel > 0){
       undoLevel--;
+      localStorage.setItem("gridSave", JSON.stringify(gridInfo[undoLevel]));
       load();
     };
-    console.log(undoLevel)
   });
 }
 
 function redoAction() {
   redoBtn.addEventListener("click", () => {
-    console.log("redo clicked")
-    if (undoLevel<=gridInfo.length){
-      localStorage.setItem("gridSave", JSON.stringify(gridInfo[undoLevel+1]));
+    if (undoLevel < gridInfo.length){
       undoLevel++;
+      localStorage.setItem("gridSave", JSON.stringify(gridInfo[undoLevel]));
       load();
     };
-    console.log(undoLevel)
   });
 }
 
@@ -283,7 +256,7 @@ function loadGrid() {
 function init() {
   colorActive();
   toolActive();
-  // toolYourSquares();
+  squareListener();
   colorChange();
   gridGenerate();
   saveGrid();
