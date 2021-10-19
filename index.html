@@ -86,25 +86,28 @@
         </div>
         <br />
         <div class="gridResolution">
-          <h3 class="gridResolutionTitle">Grid Resolution</h3>
-          <p class="inputResolution">
-            <input
-              id="width"
-              type="number"
-              value="40"
-              class="inputResolutionInput"
-              title="Pixels Wide"
-            />
-            x
-            <input
-              id="height"
-              type="number"
-              value="20"
-              class="inputResolutionInput"
-              title="Pixels Tall"
-            />
-          </p>
-          <button id="resSubmit" onclick="makeGrid()">Submit</button>
+          <form>
+            <h3 class="gridResolutionTitle">Grid Resolution</h3>
+            <p class="inputResolution">
+              <input
+                id="width"
+                type="number"
+                value="40"
+                class="inputResolutionInput"
+                title="Pixels Wide"
+              />
+              x
+              <input
+                id="height"
+                type="number"
+                value="20"
+                class="inputResolutionInput"
+                title="Pixels Tall"
+              />
+              <br><br>
+            <input id="resSubmit" type="submit"/>
+            </p>
+          </form>
         </div>
         <div class="do">
           <div>
@@ -124,14 +127,16 @@
         <!-- Modal content -->
         <div class="modal-content">
           <span class="close" onclick="modalClose()">&times;</span>
-          <br><br><br>
+          <br /><br /><br />
           <form
             enctype="multipart/form-data"
             action="/upload/image"
             method="post"
           >
             <input id="imageFile" type="file" accept=".jpg, .jpeg, .png" />
-            <button id="imageSubmit" type="button" onclick="imageUpload()">Upload</button>
+            <button id="imageSubmit" type="button" onclick="imageUpload()">
+              Upload
+            </button>
           </form>
         </div>
       </div>

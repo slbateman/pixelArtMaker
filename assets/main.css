@@ -81,6 +81,10 @@ h1 {
     width: 30%; 
 }
 
+#resSubmit {
+    text-align: center;
+}
+
 .do, .tools, .colorPicker {
     display: flex;
     flex-wrap: wrap;
@@ -124,7 +128,7 @@ h1 {
     align-content: center;
 }
 
-.row {
+.col {
     display: inline-block;
 }
 
