@@ -14,13 +14,20 @@
   <body>
     <div>
       <div class="container sideContainer">
+        <!-- Here's the primary buttons for the beginning or end of a project,
+        Save, Load, Upload Image, and Generate Inspiration -->
         <h1 class="headContainer">Pixel Art Maker</h1>
+        <!-- While there is a autosave function in the tools, the save button
+        will still need to be pressed for the final action in order to save it
+        for later -->
         <button id="saveButton" class="container button loadSave">
           <p>Save</p>
         </button>
+        <!-- When a page is refreshed, the load button will load any saved project -->
         <button id="loadButton" class="container button loadSave">
           <p>Load</p>
         </button>
+        <!-- The Inspiration button will load a random image from the internet -->
         <button
           id="inspirationButton"
           class="container button loadSave"
@@ -28,6 +35,8 @@
         >
           <p>Inspiration</p>
         </button>
+        <!-- The upload button will allow the user to upload an image of their
+        choosing for a background image reference -->
         <button
           id="uploadButton"
           class="container button loadSave"
@@ -35,8 +44,11 @@
         >
           <p>Upload</p>
         </button>
+        <!-- There are 8 color swatches in the color palette  -->
         <div class="colorBox">
           <h3 class="colorBoxTitle">Color Palette</h3>
+          <!-- The first swatch is active and can be changed
+          by the user -->
           <div id="colorSlot1" class="colorSlot active"></div>
           <div id="colorSlot2" class="colorSlot"></div>
           <div id="colorSlot3" class="colorSlot"></div>
@@ -46,12 +58,15 @@
           <div id="colorSlot7" class="colorSlot"></div>
           <div id="colorSlot8" class="colorSlot"></div>
         </div>
+        <!-- Allows user to select color to replace active color -->
         <div class="colorPicker">
           <input type="color" class="colorPickerSlot" id="colorPickerSlot" />
           <h4>Color Picker</h4>
         </div>
+        <!-- All of the tools available to the user for making art -->
         <div class="tools">
           <div>
+            <!-- Allows the user to fill the entire canvas with the active color -->
             <img
               id="fill"
               class="tool active"
@@ -59,6 +74,7 @@
               title="Fill Canvas"
             />
           </div>
+          <!-- Allows the user to drag and paint with the active color -->
           <div>
             <img
               id="paint"
@@ -67,6 +83,7 @@
               title="Paint a Square"
             />
           </div>
+          <!-- Allows the user to drag and erase any colored square -->
           <div>
             <img
               id="erase"
@@ -76,6 +93,7 @@
             />
           </div>
           <div>
+            <!-- Allows the user to wipe clean the entire canvase -->
             <img
               id="clean"
               class="tool"
@@ -85,6 +103,7 @@
           </div>
         </div>
         <br />
+        <!-- Allows user to change number of squares in the grid -->
         <div class="gridResolution">
           <form>
             <h3 class="gridResolutionTitle">Grid Resolution</h3>
@@ -109,6 +128,7 @@
             </p>
           </form>
         </div>
+        <!-- Buttons for the undo and redo functions -->
         <div class="do">
           <div>
             <img id="undo" src="assets/images/undo.png" title="Undo" />
@@ -118,11 +138,13 @@
           </div>
         </div>
       </div>
+      <!-- where the grid squares will be generated -->
       <div id="gridContainer" class="container gridContainer">
         <div id="grid" class="grid"></div>
       </div>
     </div>
     <div>
+      <!-- Modal for user to upload desired image -->
       <div id="uploadModal" class="modal">
         <!-- Modal content -->
         <div class="modal-content">
