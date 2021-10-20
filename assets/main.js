@@ -158,8 +158,8 @@ function colorChange() {
 
 // This function generates the listener for the grid
 function squareListener(e) {
-  gridContainer.addEventListener("mousedown", (e) => {
-    // Removes all future redos if undo and paint occurs
+  grid.addEventListener("mousedown", (e) => {
+    // Removes all future redos if undo then paint occurs
     while (undoLevel < gridInfo.length){
       gridInfo.pop();
     };
@@ -176,14 +176,15 @@ function squareListener(e) {
       case "paint":
       case "erase":
         e.target.style.backgroundColor = paintBool;
-        gridContainer.addEventListener("mouseup", () => {
+        grid.addEventListener("mouseup", () => {
           down = false;
         });
-          gridContainer.addEventListener("mouseover", (e) => {
+          grid.addEventListener("mouseover", (e) => {
             if (e.target.className === "square" && down) {
               e.target.style.backgroundColor = paintBool;
             }
         });
+        grid.style.backgroundColor = "";
         break;
       default:
         allSquares.forEach((square) => (square.style.backgroundColor = paintBool));
@@ -210,7 +211,7 @@ function toolActive() {
 }
 
 // Saves most recent grid color state to local storage
-// and adds grid state to a gcoling array: gridInfo
+// and adds grid state to a growing array: gridInfo
 function save() {
   const gridArray = [];
   for (let i = 0; i < allSquares.length; i++) {
@@ -249,6 +250,7 @@ function load() {
       allSquares[i].style.backgroundColor = savedGridInfo.grid[i];
     }
 }
+
 // Retrieves the saved grid from local storage when the load button is clicked
 function loadGrid() {
   loadBtn.addEventListener('click', () => {
