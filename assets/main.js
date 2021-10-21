@@ -236,11 +236,21 @@ function save() {
   undoLevel++;
 }
 
-// Saves the grid color state when save button is clicked
-function saveGrid() {
-  saveBtn.addEventListener("click", () => {
-    save();
+function saveArtImage() {
+  save();
+  const saveArt = document.createElement("div");
+  saveArt.classList.add("saveArt");
+  document.body.appendChild(saveArt);
+  html2canvas(gridContainer).then(function (canvas) {
+    saveArt.appendChild(canvas);
+    canvas.setAttribute("id", "canvas");
+    const link = document.createElement("a");
+    link.download = "download.png";
+    link.href = canvas.toDataURL();
+    link.click();
+    link.delete;
   });
+  document.body.removeChild(saveArt);
 }
 
 // Load the saved grid from local storage
@@ -299,7 +309,6 @@ function init() {
   colorChange();
   gridGenerate();
   makeGrid();
-  saveGrid();
   loadGrid();
   undoAction();
   redoAction();
