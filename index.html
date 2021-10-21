@@ -20,11 +20,20 @@
         <!-- While there is a autosave function in the tools, the save button
         will still need to be pressed for the final action in order to save it
         for later -->
-        <button id="saveButton" class="container button loadSave">
-          <p>Save</p>
+        <button
+          id="printButton"
+          class="container button loadSave"
+          onclick="saveArtImage()"
+          title="Save your Art to your Computer"
+        >
+          <p>Save Art</p>
         </button>
         <!-- When a page is refreshed, the load button will load any saved project -->
-        <button id="loadButton" class="container button loadSave">
+        <button
+          id="loadButton"
+          class="container button loadSave"
+          title="Load most recent project"
+        >
           <p>Load</p>
         </button>
         <!-- The Inspiration button will load a random image from the internet -->
@@ -32,6 +41,7 @@
           id="inspirationButton"
           class="container button loadSave"
           onclick="inspirationGen()"
+          title="Generate Random Image for Inspiration"
         >
           <p>Inspiration</p>
         </button>
@@ -41,6 +51,7 @@
           id="uploadButton"
           class="container button loadSave"
           onclick="modalLoad()"
+          title="Upload your own image for inspiration"
         >
           <p>Upload</p>
         </button>
@@ -93,7 +104,7 @@
             />
           </div>
           <div>
-            <!-- Allows the user to wipe clean the entire canvase -->
+            <!-- Allows the user to wipe clean the entire canvas -->
             <img
               id="clean"
               class="tool"
@@ -123,8 +134,8 @@
                 class="inputResolutionInput"
                 title="Pixels Tall"
               />
-              <br><br>
-            <input id="resSubmit" type="submit"/>
+              <br /><br />
+              <input id="resSubmit" type="submit" />
             </p>
           </form>
         </div>
@@ -164,5 +175,6 @@
       </div>
     </div>
     <script src="assets/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.0.0-rc.5/dist/html2canvas.min.js"></script>
   </body>
 </html>

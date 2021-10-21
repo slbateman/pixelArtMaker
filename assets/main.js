@@ -11,7 +11,7 @@ const loadBtn = document.getElementById("loadButton");
 const modal = document.getElementById("uploadModal");
 const span = document.getElementsByClassName("close")[0];
 const undoBtn = document.getElementById("undo");
-const redoBtn = document.getElementById("redo")
+const redoBtn = document.getElementById("redo");
 const gridInfo = [];
 let undoLevel = 0;
 let imgBtn = document.getElementById("imageSubmit");
@@ -27,16 +27,17 @@ let paintBool = paintColor;
 // new image is generated after each click
 function inspirationGen() {
   // A variable for storing the API object
-  const fetchImage = fetch('https://picsum.photos/1000/700');
+  const fetchImage = fetch("https://picsum.photos/1000/700");
   // Returns API object for use (object is already a JSON object)
-  fetchImage.then((response) => {
-    return response;
-  })
-  // Pulls the url associated with the object to be stored
-  // as the background image for the entire grid
-  .then((data) => {
-    gridContainer.style.backgroundImage = `url(${data.url})`
-  });
+  fetchImage
+    .then((response) => {
+      return response;
+    })
+    // Pulls the url associated with the object to be stored
+    // as the background image for the entire grid
+    .then((data) => {
+      gridContainer.style.backgroundImage = `url(${data.url})`;
+    });
 }
 
 // Enable user to upload their own image to grid background
@@ -46,11 +47,11 @@ function modalLoad() {
 function modalClose() {
   modal.style.display = "none";
 }
-window.onclick = function(event) {
+window.onclick = function (event) {
   if (event.target == modal) {
     modal.style.display = "none";
   }
-}
+};
 
 // Uploads file and reads it as a Data URL to be loaded
 function imageUpload() {
@@ -62,7 +63,7 @@ function imageUpload() {
   // Creates a new Object that enables it to be read
   const reader = new FileReader();
   modalClose();
-  reader.addEventListener('load', (event) => {
+  reader.addEventListener("load", (event) => {
     // Reads the image file
     gridContainer.style.backgroundImage = `url(${event.target.result})`;
   });
@@ -129,12 +130,12 @@ function makeGrid() {
 }
 
 // This will update the color based on tool selected color and tool
-function setColor(){
+function setColor() {
   paintColor = window.getComputedStyle(colorSlotActive).backgroundColor;
   paintBool = paintColor;
   if (paintTool.id === "erase" || paintTool.id === "clean") {
     paintBool = "";
-  };
+  }
 }
 
 // Color Palette Selector to assign active color
@@ -158,40 +159,45 @@ function colorChange() {
 
 // This function generates the listener for the grid
 function squareListener(e) {
-  gridContainer.addEventListener("mousedown", (e) => {
-    // Removes all future redos if undo and paint occurs
-    while (undoLevel < gridInfo.length){
+  grid.addEventListener("mousedown", (e) => {
+    // Removes all future redos if undo then paint occurs
+    while (undoLevel < gridInfo.length) {
       gridInfo.pop();
-    };
+    }
     // Saves the grid before every tool stroke (almost full autosave)
     save();
     down = true;
     // Depending on which tool is selected,
     // the listener will activate the proper action
-    switch (paintTool.id){
+    switch (paintTool.id) {
       case "fill":
       case "clean":
-        allSquares.forEach((square) => (square.style.backgroundColor = paintBool));
+        allSquares.forEach(
+          (square) => (square.style.backgroundColor = paintBool)
+        );
         break;
       case "paint":
       case "erase":
         e.target.style.backgroundColor = paintBool;
-        gridContainer.addEventListener("mouseup", () => {
+        grid.addEventListener("mouseup", () => {
           down = false;
         });
-          gridContainer.addEventListener("mouseover", (e) => {
-            if (e.target.className === "square" && down) {
-              e.target.style.backgroundColor = paintBool;
-            }
+        grid.addEventListener("mouseover", (e) => {
+          if (e.target.className === "square" && down) {
+            e.target.style.backgroundColor = paintBool;
+          }
         });
+        grid.style.backgroundColor = "";
         break;
       default:
-        allSquares.forEach((square) => (square.style.backgroundColor = paintBool));
-    };
+        allSquares.forEach(
+          (square) => (square.style.backgroundColor = paintBool)
+        );
+    }
   });
 }
 
-// Tool Selector to assign active tool and 
+// Tool Selector to assign active tool and
 // sets the paint boolean to paint color or none
 function toolActive() {
   for (let i = 0; i < toolList.length; i++)
@@ -199,9 +205,9 @@ function toolActive() {
       paintTool.classList.remove("active");
       paintTool = toolList[i];
       paintTool.classList.add("active");
-      if (paintTool.id === "fill" || paintTool.id === "paint"){
+      if (paintTool.id === "fill" || paintTool.id === "paint") {
         paintBool = paintColor;
-      } else if (paintTool.id === "erase" || paintTool.id === "clean"){
+      } else if (paintTool.id === "erase" || paintTool.id === "clean") {
         paintBool = "";
       } else {
         paintBool = "";
@@ -210,7 +216,7 @@ function toolActive() {
 }
 
 // Saves most recent grid color state to local storage
-// and adds grid state to a gcoling array: gridInfo
+// and adds grid state to a growing array: gridInfo
 function save() {
   const gridArray = [];
   for (let i = 0; i < allSquares.length; i++) {
@@ -223,36 +229,50 @@ function save() {
     gridWidth: widthBox,
     gridHeight: heightBox,
   });
-  localStorage.setItem("gridSave", JSON.stringify(gridInfo[gridInfo.length-1]));
+  localStorage.setItem(
+    "gridSave",
+    JSON.stringify(gridInfo[gridInfo.length - 1])
+  );
   undoLevel++;
 }
 
-// Saves the grid color state when save button is clicked
-function saveGrid() {
-  saveBtn.addEventListener("click", () => {
-    save();
+function saveArtImage() {
+  save();
+  const saveArt = document.createElement("div");
+  saveArt.classList.add("saveArt");
+  document.body.appendChild(saveArt);
+  html2canvas(gridContainer).then(function (canvas) {
+    saveArt.appendChild(canvas);
+    canvas.setAttribute("id", "canvas");
+    const link = document.createElement("a");
+    link.download = "download.png";
+    link.href = canvas.toDataURL();
+    link.click();
+    link.delete;
   });
+  document.body.removeChild(saveArt);
 }
 
 // Load the saved grid from local storage
 function load() {
-  const savedGridInfo = JSON.parse(localStorage.getItem('gridSave'));
-    // Gather the height and width from the saved grid
-    document.getElementById("width").value = savedGridInfo.gridWidth;
-    document.getElementById("height").value = savedGridInfo.gridHeight;
-    // Regenerate the grid from the saved width/height 
-    makeGrid();
-    // Load any saved image URL to the Background Image
-    gridContainer.style.backgroundImage = savedGridInfo.gridImage;
-    // Load the saved square color by looping through the saved array
-    for (let i = 0; i < allSquares.length; i++) {
-      allSquares[i].style.backgroundColor = savedGridInfo.grid[i];
-    }
+  const savedGridInfo = JSON.parse(localStorage.getItem("gridSave"));
+  // Gather the height and width from the saved grid
+  document.getElementById("width").value = savedGridInfo.gridWidth;
+  document.getElementById("height").value = savedGridInfo.gridHeight;
+  // Regenerate the grid from the saved width/height
+  makeGrid();
+  // Load any saved image URL to the Background Image
+  gridContainer.style.backgroundImage = savedGridInfo.gridImage;
+  // Load the saved square color by looping through the saved array
+  for (let i = 0; i < allSquares.length; i++) {
+    allSquares[i].style.backgroundColor = savedGridInfo.grid[i];
+  }
 }
+
 // Retrieves the saved grid from local storage when the load button is clicked
 function loadGrid() {
-  loadBtn.addEventListener('click', () => {
-    load()
+  loadBtn.addEventListener("click", () => {
+    load();
   });
 }
 
@@ -260,11 +280,11 @@ function loadGrid() {
 // and moves backward in time
 function undoAction() {
   undoBtn.addEventListener("click", () => {
-    if (undoLevel > 0){
+    if (undoLevel > 0) {
       undoLevel--;
       localStorage.setItem("gridSave", JSON.stringify(gridInfo[undoLevel]));
       load();
-    };
+    }
   });
 }
 
@@ -272,11 +292,11 @@ function undoAction() {
 // and moves forward in time
 function redoAction() {
   redoBtn.addEventListener("click", () => {
-    if (undoLevel < gridInfo.length){
+    if (undoLevel < gridInfo.length) {
       undoLevel++;
       localStorage.setItem("gridSave", JSON.stringify(gridInfo[undoLevel]));
       load();
-    };
+    }
   });
 }
 
@@ -289,11 +309,9 @@ function init() {
   colorChange();
   gridGenerate();
   makeGrid();
-  saveGrid();
   loadGrid();
   undoAction();
   redoAction();
-
 }
 
 init();
