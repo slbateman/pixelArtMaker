@@ -160,39 +160,41 @@ function colorChange() {
 // This function generates the listener for the grid
 function squareListener(e) {
   grid.addEventListener("mousedown", (e) => {
-    // Removes all future redos if undo then paint occurs
-    while (undoLevel < gridInfo.length) {
-      gridInfo.pop();
-    }
-    // Saves the grid before every tool stroke (almost full autosave)
-    save();
-    down = true;
-    // Depending on which tool is selected,
-    // the listener will activate the proper action
-    switch (paintTool.id) {
-      case "fill":
-      case "clean":
-        allSquares.forEach(
-          (square) => (square.style.backgroundColor = paintBool)
-        );
-        break;
-      case "paint":
-      case "erase":
-        e.target.style.backgroundColor = paintBool;
-        grid.addEventListener("mouseup", () => {
-          down = false;
-        });
-        grid.addEventListener("mouseover", (e) => {
-          if (e.target.className === "square" && down) {
-            e.target.style.backgroundColor = paintBool;
-          }
-        });
-        grid.style.backgroundColor = "";
-        break;
-      default:
-        allSquares.forEach(
-          (square) => (square.style.backgroundColor = paintBool)
-        );
+    if (e.which === 1) {
+      // Removes all future redos if undo then paint occurs
+      while (undoLevel < gridInfo.length) {
+        gridInfo.pop();
+      }
+      // Saves the grid before every tool stroke (almost full autosave)
+      save();
+      down = true;
+      // Depending on which tool is selected,
+      // the listener will activate the proper action
+      switch (paintTool.id) {
+        case "fill":
+        case "clean":
+          allSquares.forEach(
+            (square) => (square.style.backgroundColor = paintBool)
+          );
+          break;
+        case "paint":
+        case "erase":
+          e.target.style.backgroundColor = paintBool;
+          grid.addEventListener("mouseup", () => {
+            down = false;
+          });
+          grid.addEventListener("mouseover", (e) => {
+            if (e.target.className === "square" && down) {
+              e.target.style.backgroundColor = paintBool;
+            }
+          });
+          grid.style.backgroundColor = "";
+          break;
+        default:
+          allSquares.forEach(
+            (square) => (square.style.backgroundColor = paintBool)
+          );
+      }
     }
   });
 }
