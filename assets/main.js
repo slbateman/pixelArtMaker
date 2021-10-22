@@ -27,7 +27,7 @@ let paintBool = paintColor;
 // new image is generated after each click
 function inspirationGen() {
   // A variable for storing the API object
-  const fetchImage = fetch("https://picsum.photos/1000/700");
+  const fetchImage = fetch("https://picsum.photos/500/300");
   // Returns API object for use (object is already a JSON object)
   fetchImage
     .then((response) => {
@@ -160,39 +160,48 @@ function colorChange() {
 // This function generates the listener for the grid
 function squareListener(e) {
   grid.addEventListener("mousedown", (e) => {
-    // Removes all future redos if undo then paint occurs
-    while (undoLevel < gridInfo.length) {
-      gridInfo.pop();
-    }
-    // Saves the grid before every tool stroke (almost full autosave)
-    save();
-    down = true;
-    // Depending on which tool is selected,
-    // the listener will activate the proper action
-    switch (paintTool.id) {
-      case "fill":
-      case "clean":
-        allSquares.forEach(
-          (square) => (square.style.backgroundColor = paintBool)
-        );
-        break;
-      case "paint":
-      case "erase":
-        e.target.style.backgroundColor = paintBool;
-        grid.addEventListener("mouseup", () => {
-          down = false;
-        });
-        grid.addEventListener("mouseover", (e) => {
-          if (e.target.className === "square" && down) {
-            e.target.style.backgroundColor = paintBool;
-          }
-        });
-        grid.style.backgroundColor = "";
-        break;
-      default:
-        allSquares.forEach(
-          (square) => (square.style.backgroundColor = paintBool)
-        );
+    // Painting occurred with right click so I added if 
+    // statement to figure out which mouse down was happening
+    if (e.which === 1) {
+      // Removes all future redos if undo then paint occurs
+      while (undoLevel < gridInfo.length) {
+        gridInfo.pop();
+      }
+      // Saves the grid before every tool stroke (almost full autosave)
+      save();
+      down = true;
+      // Depending on which tool is selected,
+      // the listener will activate the proper action
+      switch (paintTool.id) {
+        case "fill":
+          allSquares.forEach(
+            (square) => (square.style.backgroundColor = paintBool)
+          );
+          break;
+        case "clean":
+          allSquares.forEach(
+            (square) => (square.style.backgroundColor = paintBool)
+          );
+          gridContainer.style.backgroundImage = "";
+          break;
+        case "paint":
+        case "erase":
+          e.target.style.backgroundColor = paintBool;
+          grid.addEventListener("mouseup", () => {
+            down = false;
+          });
+          grid.addEventListener("mouseover", (e) => {
+            if (e.target.className === "square" && down) {
+              e.target.style.backgroundColor = paintBool;
+            }
+          });
+          grid.style.backgroundColor = "";
+          break;
+        default:
+          allSquares.forEach(
+            (square) => (square.style.backgroundColor = paintBool)
+          );
+      }
     }
   });
 }
@@ -236,11 +245,13 @@ function save() {
   undoLevel++;
 }
 
+// Downloads an image of the current state of the art being made
 function saveArtImage() {
   save();
   const saveArt = document.createElement("div");
   saveArt.classList.add("saveArt");
   document.body.appendChild(saveArt);
+  // 3rd party function for converting div to canvas
   html2canvas(gridContainer).then(function (canvas) {
     saveArt.appendChild(canvas);
     canvas.setAttribute("id", "canvas");
@@ -250,6 +261,8 @@ function saveArtImage() {
     link.click();
     link.delete;
   });
+  // Div will not be visible but this will also remove 
+  // the div after download
   document.body.removeChild(saveArt);
 }
 
@@ -260,7 +273,9 @@ function load() {
   document.getElementById("width").value = savedGridInfo.gridWidth;
   document.getElementById("height").value = savedGridInfo.gridHeight;
   // Regenerate the grid from the saved width/height
-  makeGrid();
+  gridRemove()
+  gridGenerate()
+  
   // Load any saved image URL to the Background Image
   gridContainer.style.backgroundImage = savedGridInfo.gridImage;
   // Load the saved square color by looping through the saved array
