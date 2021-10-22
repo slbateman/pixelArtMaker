@@ -27,7 +27,7 @@ let paintBool = paintColor;
 // new image is generated after each click
 function inspirationGen() {
   // A variable for storing the API object
-  const fetchImage = fetch("https://picsum.photos/1000/700");
+  const fetchImage = fetch("https://picsum.photos/500/300");
   // Returns API object for use (object is already a JSON object)
   fetchImage
     .then((response) => {
@@ -160,6 +160,8 @@ function colorChange() {
 // This function generates the listener for the grid
 function squareListener(e) {
   grid.addEventListener("mousedown", (e) => {
+    // Painting occurred with right click so I added if 
+    // statement to figure out which mouse down was happening
     if (e.which === 1) {
       // Removes all future redos if undo then paint occurs
       while (undoLevel < gridInfo.length) {
@@ -238,11 +240,13 @@ function save() {
   undoLevel++;
 }
 
+// Downloads an image of the current state of the art being made
 function saveArtImage() {
   save();
   const saveArt = document.createElement("div");
   saveArt.classList.add("saveArt");
   document.body.appendChild(saveArt);
+  // 3rd party function for converting div to canvas
   html2canvas(gridContainer).then(function (canvas) {
     saveArt.appendChild(canvas);
     canvas.setAttribute("id", "canvas");
@@ -252,6 +256,8 @@ function saveArtImage() {
     link.click();
     link.delete;
   });
+  // Div will not be visible but this will also remove 
+  // the div after download
   document.body.removeChild(saveArt);
 }
 
