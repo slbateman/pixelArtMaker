@@ -36,6 +36,9 @@ function inspirationGen() {
     // Pulls the url associated with the object to be stored
     // as the background image for the entire grid
     .then((data) => {
+      allSquares.forEach(
+        (square) => (square.style.backgroundColor = "")
+      );
       gridContainer.style.backgroundImage = `url(${data.url})`;
     });
 }
