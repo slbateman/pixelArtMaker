@@ -275,6 +275,7 @@ function load() {
   // Regenerate the grid from the saved width/height
   gridRemove()
   gridGenerate()
+  
   // Load any saved image URL to the Background Image
   gridContainer.style.backgroundImage = savedGridInfo.gridImage;
   // Load the saved square color by looping through the saved array
