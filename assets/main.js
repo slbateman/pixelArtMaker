@@ -174,10 +174,15 @@ function squareListener(e) {
       // the listener will activate the proper action
       switch (paintTool.id) {
         case "fill":
+          allSquares.forEach(
+            (square) => (square.style.backgroundColor = paintBool)
+          );
+          break;
         case "clean":
           allSquares.forEach(
             (square) => (square.style.backgroundColor = paintBool)
           );
+          gridContainer.style.backgroundImage = "";
           break;
         case "paint":
         case "erase":
@@ -268,7 +273,8 @@ function load() {
   document.getElementById("width").value = savedGridInfo.gridWidth;
   document.getElementById("height").value = savedGridInfo.gridHeight;
   // Regenerate the grid from the saved width/height
-  makeGrid();
+  gridRemove()
+  gridGenerate()
   // Load any saved image URL to the Background Image
   gridContainer.style.backgroundImage = savedGridInfo.gridImage;
   // Load the saved square color by looping through the saved array
